@@ -18,7 +18,6 @@ const handleConnection = socket => {
         }
 
     })
-    // console.log(socket);
 }
 
 const server = net.createServer(handleConnection)

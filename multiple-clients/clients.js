@@ -13,10 +13,5 @@ client.connect(4000, '127.0.0.1', () => {
     })
     rl.addListener('line', line => {
         client.write(line)
-        // if(line === 'end'){
-        //     console.log("Conexão encerrada")
-        //     client.end()
-        //     process.exit()
-        // }
     })
 })

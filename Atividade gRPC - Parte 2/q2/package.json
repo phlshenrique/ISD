@@ -1,0 +1,21 @@
+{
+  "name": "grpcchat",
+  "version": "1.0.1",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node --expose-http2 server.js"
+  },
+  "keywords": [
+    "grpc",
+    "protocol",
+    "buffers",
+    "rpc"
+  ],
+  "author": "Pedro",
+  "license": "GNU",
+  "dependencies": {
+    "@grpc/proto-loader": "^0.3.0",
+    "grpc": "^1.13.0"
+  }
+}

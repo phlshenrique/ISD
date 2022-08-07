@@ -21,12 +21,22 @@ var packageDefinition = protoLoader.loadSync(
 var proto = grpc.loadPackageDefinition(packageDefinition).chat;
 
 function onData(message){
-  console.log(message.text);
+  if(uuid == null && username == null){
+    uuid = message.user;
+  }
+  console.log(`${message.user}: ${message.text}`);
 }
+let uuid;
+let username;
 
 function main() {
   rl.on("line", function(text) {
-    client.send({ text: text }, res => {});
+    if(username == null){
+      username = text.replace(/[\r\n]/gm, '');
+      client.send({user: username, text: uuid}, res => {});
+    }else{
+      client.send({ user: username, text: text }, res => {});
+    }
   });
   var target = 'localhost:50051';
   var client = new proto.Chat(target, grpc.credentials.createInsecure());

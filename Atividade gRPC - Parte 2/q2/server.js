@@ -26,12 +26,31 @@ function send(call, callback){
   if(users[index] && users[index].name == null){
     users[index].name = call.request.user; 
   } else {
+    let msg;
+    if(call.request.text === 'exit'){
+      const index = users.map(elem => elem.name).indexOf(call.request.user);
+      users.splice(index,1);
+      msg = `User ${call.request.user} has disconnected from chat!`;
+      // warnThen(`User ${call.request.user} has disconnected from chat!`)
+    }
+
     users.forEach(user => {
       if(user.name != call.request.user){
-        user.write({user: call.request.user, text:call.request.text});
+        if(msg){
+          user.write({user: 'Server', text:msg});
+        }else{
+          user.write({user: call.request.user, text:call.request.text});
+        }
       }
     })
+    
   }
+}
+
+function warnThen(msg){
+  users.forEach(user => {
+    user.write({user: 'server', text: msg});
+  })
 }
 
 function main() {

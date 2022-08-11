@@ -21,13 +21,19 @@ var packageDefinition = protoLoader.loadSync(
 var proto = grpc.loadPackageDefinition(packageDefinition).chat;
 
 function onData(message){
-  if(uuid == null && username == null){
-    uuid = message.user;
+  if(message.user != 'server' && message.text != 'test alive'){
+    if(uuid == null && username == null){
+      uuid = message.user;
+    }
+    console.log(`${message.user}: ${message.text}`);
   }
-  console.log(`${message.user}: ${message.text}`);
 }
-let uuid;
+  let uuid;
 let username;
+
+function quit(){
+  process.exit();
+}
 
 function main() {
   rl.on("line", function(text) {
@@ -35,6 +41,11 @@ function main() {
       username = text.replace(/[\r\n]/gm, '');
       client.send({user: username, text: uuid}, res => {});
     }else{
+      if(text == 'exit'){
+        client.send({user: username, text: text}, res => {});
+        console.log('waiting to quit!');
+        setTimeout(quit, 2000);
+      }
       client.send({ user: username, text: text }, res => {});
     }
   });

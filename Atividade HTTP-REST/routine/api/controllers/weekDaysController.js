@@ -1,5 +1,17 @@
+const weekdays = [];
+
 exports.post = (req, res, next) => {
-    res.status(201).send('Rota POST!');
+   // console.log(req.body);
+   day = {
+      day: req.body.day,
+      joblist: {
+         tarefa: req.body.joblist.tarefa,
+         feito: req.body.joblist.done
+      }
+   }
+   weekdays.push(day);
+   console.log(weekdays);
+   res.status(201).send('Rota POST!');
  };
   
  exports.put = (req, res, next) => {
@@ -13,7 +25,19 @@ exports.post = (req, res, next) => {
  };
   
  exports.get = (req, res, next) => {
-    res.status(200).send('Rota GET!');
+   days = []
+   weekdays.forEach((day, i) =>{
+      i = {
+         "day": day.day,
+         "link": {
+            'href': `/${day.day}`,
+            'rel': `weekdays`,
+            'type': 'GET'
+         }
+      }
+      days.push(i);
+   })
+   res.status(200).send(days);
  };
   
  exports.getById = (req, res, next) => {

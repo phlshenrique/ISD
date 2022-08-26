@@ -1,16 +1,18 @@
 const weekdays = [];
 
 exports.post = (req, res, next) => {
-   // console.log(req.body);
    day = {
       day: req.body.day,
-      joblist: {
-         tarefa: req.body.joblist.tarefa,
-         feito: req.body.joblist.done
-      }
+      joblist: []
    }
+   req.body.joblist.forEach((job, i) => {
+      joblist = {
+         tarefa: job.tarefa,
+         done: job.done,
+      }
+      day.joblist.push(joblist);
+   });
    weekdays.push(day);
-   console.log(weekdays);
    res.status(201).send('Rota POST!');
  };
   

@@ -1,6 +1,6 @@
 const weekdays = [];
 
-exports.post = (req, res, next) => {
+function getDay(req){
    day = {
       day: req.body.day,
       joblist: []
@@ -12,13 +12,35 @@ exports.post = (req, res, next) => {
       }
       day.joblist.push(joblist);
    });
-   weekdays.push(day);
-   res.status(201).send('Rota POST!');
+   return day;
+}
+
+function printWeekDay(weekday){
+   console.log(weekday.day);
+   weekday.joblist.forEach((job, i) => {
+      console.log(`Tarefa: ${job.tarefa} done: ${job.done}`);
+   })
+}
+
+exports.post = (req, res, next) => {
+   weekdays.push(getDay(req));
+   res.status(201).send();
  };
   
  exports.put = (req, res, next) => {
-    let id = req.params.id;
-    res.status(201).send(`Rota PUT com ID! --> ${id}`);
+   let weekdayReq = JSON.parse(req.params.weekday);
+   let sended = false;
+   for (let i = 0; i < weekdays.length; i++){
+      if(weekdays[i].day == weekdayReq.day){
+         weekdays[i] = weekdayReq;
+         res.status(201).send(`Rota PUT ok!`);
+         sended = true;
+         return; 
+      }
+   }
+   if(!sended){
+      res.status(404).send(`Rota PUT weekday not found!`);
+   }
  };
   
  exports.delete = (req, res, next) => {
@@ -33,16 +55,28 @@ exports.post = (req, res, next) => {
          "day": day.day,
          "link": {
             'href': `/${day.day}`,
-            'rel': `weekdays`,
+            'rel': `weekday`,
             'type': 'GET'
          }
       }
       days.push(i);
    })
-   res.status(200).send(days);
+   if(days.length != 0){
+      res.status(200).send(days);
+   }else{
+      res.status(204).send(days);
+   }
  };
   
  exports.getById = (req, res, next) => {
-    let id = req.params.id;
-    res.status(200).send(`Rota GET com ID! ${id}`);
+   const { name } = req.params;
+   for(i=0; i<weekdays.length; i++){
+      if(weekdays[i].day == name){
+         printWeekDay(weekdays[i]);
+         res.status(200).send(`Rota GET com ID!\n ${weekdays[i]}`);
+         return;
+      }
+   }
+   res.status(204).send(`Rota GET com ID não encontrado!`);
+   return 
  };

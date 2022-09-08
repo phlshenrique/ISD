@@ -1,0 +1,16 @@
+<html>
+<script language="javascript">
+    var source = new EventSource("http://localhost:9090");
+    source.onmessage = function (event) {
+        document.getElementById("result").innerHTML = '<p>' + event.data + '</p>';
+    };
+</script>
+
+<body>
+    <form>
+        <div id="result">
+            </result>
+    </form>
+</body>
+
+</html>

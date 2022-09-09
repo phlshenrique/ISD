@@ -14,6 +14,7 @@ amqp.connect('amqp://localhost', function (error0, connection) {
         channel.assertQueue(queue, {
             durable: true
         });
+        channel.prefetch(1);
 
         channel.consume(queue, function (msg) {
             var secs = msg.content.toString().split('.').length - 1;
@@ -21,9 +22,10 @@ amqp.connect('amqp://localhost', function (error0, connection) {
             console.log(" [x] Received %s", msg.content.toString());
             setTimeout(function () {
                 console.log(" [x] Done");
+                channel.ack(msg);
             }, secs * 1000);
         }, {
-            noAck: true
+            noAck: false
         });
     });
 });

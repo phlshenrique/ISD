@@ -1,0 +1,35 @@
+<html>
+<script language="javascript">
+    var connection = new WebSocket('ws://localhost:8080/testing');
+    connection.onopen = function () {
+        console.log('Connection open!');
+        var input = document.getElementById('texto');
+        input.style.display = 'block';
+        // connection.send('Hey server, whats up?');
+    }
+    connection.onclose = function () {
+        console.log('Connection closed');
+    }
+    connection.onmessage = function (e) {
+        const arr = e.data.split('-');
+        var id = arr[0];
+        var server_message = arr[1];
+        console.log('id: ' + id + ' msg: ' + server_message);
+        document.getElementById("result").innerHTML += server_message + 
+        '<input type="button" value="Authorize!" onclick="sendMessage(' + id + ');">' + "<br>";
+    }
+    function sendMessage(id){
+        console.log(id);
+        connection.send(id);
+    }
+</script>
+
+<body>
+    <!-- <form> -->
+    <input type="button" value="send!" onclick="sendMessage();">
+    <div id="result">
+    </div>
+    <!-- </form> -->
+</body>
+
+</html>
